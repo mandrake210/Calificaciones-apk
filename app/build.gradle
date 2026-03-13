@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdk 34
+    namespace 'com.mandrake.calificaciones'
+
+    defaultConfig {
+        applicationId "com.mandrake.calificaciones"
+        minSdk 21          // Android 5.0+ (cubre el 98% de dispositivos)
+        targetSdk 34
+        versionCode 14
+        versionName "10.14"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug  // firmado debug para instalación directa
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
+    // La app HTML pesa ~300 KB — sin ProGuard ni splits necesarios
+    bundle {
+        language { enableSplit = false }
+        density  { enableSplit = false }
+        abi      { enableSplit = false }
+    }
+}
+
+dependencies {
+    // Sin dependencias externas — la app es 100% WebView + HTML
+    implementation 'androidx.annotation:annotation:1.7.0'
+}
