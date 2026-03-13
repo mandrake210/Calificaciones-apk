@@ -21,135 +21,42 @@ jobs:
       - name: Instalar Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Crear proyecto Android con Python
+      - name: Crear archivos del proyecto
         run: |
-          python3 << 'PYEOF'
-          import os
+          mkdir -p $(dirname "app/src/main/java/com/mandrake/calificaciones/MainActivity.java")
+          echo "cGFja2FnZSBjb20ubWFuZHJha2UuY2FsaWZpY2FjaW9uZXM7CmltcG9ydCBhbmRyb2lkLmFwcC5BY3Rpdml0eTsKaW1wb3J0IGFuZHJvaWQub3MuQnVuZGxlOwppbXBvcnQgYW5kcm9pZC52aWV3LldpbmRvdzsKaW1wb3J0IGFuZHJvaWQudmlldy5XaW5kb3dNYW5hZ2VyOwppbXBvcnQgYW5kcm9pZC53ZWJraXQuKjsKcHVibGljIGNsYXNzIE1haW5BY3Rpdml0eSBleHRlbmRzIEFjdGl2aXR5IHsKICAgIHByaXZhdGUgV2ViVmlldyB3ZWJWaWV3OwogICAgQE92ZXJyaWRlIHByb3RlY3RlZCB2b2lkIG9uQ3JlYXRlKEJ1bmRsZSBzYXZlZEluc3RhbmNlU3RhdGUpIHsKICAgICAgICBzdXBlci5vbkNyZWF0ZShzYXZlZEluc3RhbmNlU3RhdGUpOwogICAgICAgIHJlcXVlc3RXaW5kb3dGZWF0dXJlKFdpbmRvdy5GRUFUVVJFX05PX1RJVExFKTsKICAgICAgICBnZXRXaW5kb3coKS5zZXRGbGFncyhXaW5kb3dNYW5hZ2VyLkxheW91dFBhcmFtcy5GTEFHX0ZVTExTQ1JFRU4sIFdpbmRvd01hbmFnZXIuTGF5b3V0UGFyYW1zLkZMQUdfRlVMTFNDUkVFTik7CiAgICAgICAgd2ViVmlldyA9IG5ldyBXZWJWaWV3KHRoaXMpOwogICAgICAgIHNldENvbnRlbnRWaWV3KHdlYlZpZXcpOwogICAgICAgIFdlYlNldHRpbmdzIHMgPSB3ZWJWaWV3LmdldFNldHRpbmdzKCk7CiAgICAgICAgcy5zZXRKYXZhU2NyaXB0RW5hYmxlZCh0cnVlKTsKICAgICAgICBzLnNldERvbVN0b3JhZ2VFbmFibGVkKHRydWUpOwogICAgICAgIHMuc2V0QWxsb3dGaWxlQWNjZXNzRnJvbUZpbGVVUkxzKHRydWUpOwogICAgICAgIHMuc2V0QWxsb3dVbml2ZXJzYWxBY2Nlc3NGcm9tRmlsZVVSTHModHJ1ZSk7CiAgICAgICAgcy5zZXRNaXhlZENvbnRlbnRNb2RlKFdlYlNldHRpbmdzLk1JWEVEX0NPTlRFTlRfQUxXQVlTX0FMTE9XKTsKICAgICAgICB3ZWJWaWV3LnNldFdlYkNocm9tZUNsaWVudChuZXcgV2ViQ2hyb21lQ2xpZW50KCkgewogICAgICAgICAgICBAT3ZlcnJpZGUgcHVibGljIHZvaWQgb25QZXJtaXNzaW9uUmVxdWVzdChQZXJtaXNzaW9uUmVxdWVzdCByKSB7IHIuZ3JhbnQoci5nZXRSZXNvdXJjZXMoKSk7IH0KICAgICAgICB9KTsKICAgICAgICB3ZWJWaWV3LmxvYWRVcmwoImZpbGU6Ly8vYW5kcm9pZF9hc3NldC9pbmRleC5odG1sIik7CiAgICB9CiAgICBAT3ZlcnJpZGUgcHVibGljIHZvaWQgb25CYWNrUHJlc3NlZCgpIHsgaWYgKHdlYlZpZXcuY2FuR29CYWNrKCkpIHdlYlZpZXcuZ29CYWNrKCk7IGVsc2Ugc3VwZXIub25CYWNrUHJlc3NlZCgpOyB9Cn0K" | base64 -d > "app/src/main/java/com/mandrake/calificaciones/MainActivity.java"
+          mkdir -p $(dirname "app/src/main/AndroidManifest.xml")
+          echo "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPG1hbmlmZXN0IHhtbG5zOmFuZHJvaWQ9Imh0dHA6Ly9zY2hlbWFzLmFuZHJvaWQuY29tL2Fway9yZXMvYW5kcm9pZCIKICAgIHBhY2thZ2U9ImNvbS5tYW5kcmFrZS5jYWxpZmljYWNpb25lcyI+CiAgICA8dXNlcy1wZXJtaXNzaW9uIGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5wZXJtaXNzaW9uLklOVEVSTkVUIiAvPgogICAgPHVzZXMtcGVybWlzc2lvbiBhbmRyb2lkOm5hbWU9ImFuZHJvaWQucGVybWlzc2lvbi5DQU1FUkEiIC8+CiAgICA8YXBwbGljYXRpb24gYW5kcm9pZDphbGxvd0JhY2t1cD0idHJ1ZSIgYW5kcm9pZDpsYWJlbD0iQ2FsaWZpY2FjaW9uZXMiCiAgICAgICAgYW5kcm9pZDp1c2VzQ2xlYXJ0ZXh0VHJhZmZpYz0idHJ1ZSIgYW5kcm9pZDpoYXJkd2FyZUFjY2VsZXJhdGVkPSJ0cnVlIj4KICAgICAgICA8YWN0aXZpdHkgYW5kcm9pZDpuYW1lPSIuTWFpbkFjdGl2aXR5IiBhbmRyb2lkOmV4cG9ydGVkPSJ0cnVlIgogICAgICAgICAgICBhbmRyb2lkOnNjcmVlbk9yaWVudGF0aW9uPSJzZW5zb3JMYW5kc2NhcGUiCiAgICAgICAgICAgIGFuZHJvaWQ6Y29uZmlnQ2hhbmdlcz0ib3JpZW50YXRpb258c2NyZWVuU2l6ZXxrZXlib2FyZEhpZGRlbiI+CiAgICAgICAgICAgIDxpbnRlbnQtZmlsdGVyPgogICAgICAgICAgICAgICAgPGFjdGlvbiBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuaW50ZW50LmFjdGlvbi5NQUlOIiAvPgogICAgICAgICAgICAgICAgPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuY2F0ZWdvcnkuTEFVTkNIRVIiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICA8L2FjdGl2aXR5PgogICAgPC9hcHBsaWNhdGlvbj4KPC9tYW5pZmVzdD4K" | base64 -d > "app/src/main/AndroidManifest.xml"
+          mkdir -p $(dirname "app/src/main/res/values/styles.xml")
+          echo "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHJlc291cmNlcz4KICAgIDxzdHlsZSBuYW1lPSJBcHBUaGVtZSIgcGFyZW50PSJhbmRyb2lkOlRoZW1lLk1hdGVyaWFsLk5vQWN0aW9uQmFyIj4KICAgICAgICA8aXRlbSBuYW1lPSJhbmRyb2lkOnN0YXR1c0JhckNvbG9yIj4jMWExYTJlPC9pdGVtPgogICAgPC9zdHlsZT4KPC9yZXNvdXJjZXM+Cg==" | base64 -d > "app/src/main/res/values/styles.xml"
+          mkdir -p $(dirname "app/src/main/res/values/strings.xml")
+          echo "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHJlc291cmNlcz48c3RyaW5nIG5hbWU9ImFwcF9uYW1lIj5DYWxpZmljYWNpb25lczwvc3RyaW5nPjwvcmVzb3VyY2VzPgo=" | base64 -d > "app/src/main/res/values/strings.xml"
+          echo "cGx1Z2lucyB7CiAgICBpZCAnY29tLmFuZHJvaWQuYXBwbGljYXRpb24nCn0KYW5kcm9pZCB7CiAgICBjb21waWxlU2RrIDM0CiAgICBuYW1lc3BhY2UgJ2NvbS5tYW5kcmFrZS5jYWxpZmljYWNpb25lcycKICAgIGRlZmF1bHRDb25maWcgewogICAgICAgIGFwcGxpY2F0aW9uSWQgImNvbS5tYW5kcmFrZS5jYWxpZmljYWNpb25lcyIKICAgICAgICBtaW5TZGsgMjEKICAgICAgICB0YXJnZXRTZGsgMzQKICAgICAgICB2ZXJzaW9uQ29kZSAxNQogICAgICAgIHZlcnNpb25OYW1lICIxMC4xNSIKICAgIH0KICAgIGJ1aWxkVHlwZXMgewogICAgICAgIGRlYnVnIHsgZGVidWdnYWJsZSB0cnVlIH0KICAgIH0KICAgIGNvbXBpbGVPcHRpb25zIHsKICAgICAgICBzb3VyY2VDb21wYXRpYmlsaXR5IEphdmFWZXJzaW9uLlZFUlNJT05fMV84CiAgICAgICAgdGFyZ2V0Q29tcGF0aWJpbGl0eSBKYXZhVmVyc2lvbi5WRVJTSU9OXzFfOAogICAgfQp9CmRlcGVuZGVuY2llcyB7fQo=" | base64 -d > "app/build.gradle"
+          echo "YnVpbGRzY3JpcHQgewogICAgcmVwb3NpdG9yaWVzIHsKICAgICAgICBnb29nbGUoKQogICAgICAgIG1hdmVuQ2VudHJhbCgpCiAgICB9CiAgICBkZXBlbmRlbmNpZXMgewogICAgICAgIGNsYXNzcGF0aCAnY29tLmFuZHJvaWQudG9vbHMuYnVpbGQ6Z3JhZGxlOjguMi4yJwogICAgfQp9CmFsbHByb2plY3RzIHsKICAgIHJlcG9zaXRvcmllcyB7CiAgICAgICAgZ29vZ2xlKCkKICAgICAgICBtYXZlbkNlbnRyYWwoKQogICAgfQp9Cg==" | base64 -d > "build.gradle"
+          echo "cGx1Z2luTWFuYWdlbWVudCB7CiAgICByZXBvc2l0b3JpZXMgewogICAgICAgIGdvb2dsZSgpCiAgICAgICAgbWF2ZW5DZW50cmFsKCkKICAgICAgICBncmFkbGVQbHVnaW5Qb3J0YWwoKQogICAgfQp9CmRlcGVuZGVuY3lSZXNvbHV0aW9uTWFuYWdlbWVudCB7CiAgICByZXBvc2l0b3JpZXNNb2RlLnNldChSZXBvc2l0b3JpZXNNb2RlLkZBSUxfT05fUFJPSkVDVF9SRVBPUykKICAgIHJlcG9zaXRvcmllcyB7CiAgICAgICAgZ29vZ2xlKCkKICAgICAgICBtYXZlbkNlbnRyYWwoKQogICAgfQp9CnJvb3RQcm9qZWN0Lm5hbWUgPSAiQ2FsaWZpY2FjaW9uZXNBcHAiCmluY2x1ZGUgJzphcHAnCg==" | base64 -d > "settings.gradle"
+          echo "b3JnLmdyYWRsZS5qdm1hcmdzPS1YbXgyMDQ4bQphbmRyb2lkLnVzZUFuZHJvaWRYPXRydWUK" | base64 -d > "gradle.properties"
 
-          def mkfile(path, content):
-              os.makedirs(os.path.dirname(path), exist_ok=True)
-              open(path, 'w').write(content)
+      - name: Descargar HTML de la app
+        run: |
+          mkdir -p app/src/main/assets
+          curl -L "https://mandrake210.github.io/calificaciones/" -o app/src/main/assets/index.html
+          echo "HTML: $(wc -c < app/src/main/assets/index.html) bytes"
 
-          mkfile('app/src/main/java/com/mandrake/calificaciones/MainActivity.java', """
-          package com.mandrake.calificaciones;
-          import android.app.Activity;
-          import android.os.Bundle;
-          import android.view.Window;
-          import android.view.WindowManager;
-          import android.webkit.*;
-          public class MainActivity extends Activity {
-              private WebView webView;
-              @Override protected void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-                  requestWindowFeature(Window.FEATURE_NO_TITLE);
-                  getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                  webView = new WebView(this);
-                  setContentView(webView);
-                  WebSettings s = webView.getSettings();
-                  s.setJavaScriptEnabled(true);
-                  s.setDomStorageEnabled(true);
-                  s.setAllowFileAccessFromFileURLs(true);
-                  s.setAllowUniversalAccessFromFileURLs(true);
-                  s.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                  webView.setWebChromeClient(new WebChromeClient() {
-                      @Override public void onPermissionRequest(PermissionRequest r) { r.grant(r.getResources()); }
-                  });
-                  webView.loadUrl("file:///android_asset/index.html");
-              }
-              @Override public void onBackPressed() { if (webView.canGoBack()) webView.goBack(); else super.onBackPressed(); }
-          }
-          """)
+      - name: Construir APK
+        run: gradle assembleDebug --stacktrace
 
-          mkfile('app/src/main/AndroidManifest.xml', """<?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-              package="com.mandrake.calificaciones">
-              <uses-permission android:name="android.permission.INTERNET" />
-              <uses-permission android:name="android.permission.CAMERA" />
-              <application android:allowBackup="true" android:label="Calificaciones"
-                  android:usesCleartextTraffic="true" android:hardwareAccelerated="true">
-                  <activity android:name=".MainActivity" android:exported="true"
-                      android:screenOrientation="sensorLandscape"
-                      android:configChanges="orientation|screenSize|keyboardHidden">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>""")
+      - name: Subir APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Calificaciones-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
 
-          mkfile('app/src/main/res/values/styles.xml', """<?xml version="1.0" encoding="utf-8"?>
-          <resources>
-              <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
-                  <item name="android:statusBarColor">#1a1a2e</item>
-              </style>
-          </resources>""")
-
-          mkfile('app/src/main/res/values/strings.xml', """<?xml version="1.0" encoding="utf-8"?>
-          <resources><string name="app_name">Calificaciones</string></resources>""")
-
-          mkfile('app/build.gradle', """
-          plugins {
-              id 'com.android.application'
-          }
-          android {
-              compileSdk 34
-              namespace 'com.mandrake.calificaciones'
-              defaultConfig {
-                  applicationId "com.mandrake.calificaciones"
-                  minSdk 21
-                  targetSdk 34
-                  versionCode 15
-                  versionName "10.15"
-              }
-              buildTypes {
-                  debug { debuggable true }
-              }
-              compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_1_8
-                  targetCompatibility JavaVersion.VERSION_1_8
-              }
-          }
-          dependencies {}
-          """)
-
-          mkfile('build.gradle', """
-          buildscript {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.2.2'
-              }
-          }
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          """)
-
-          mkfile('settings.gradle', """
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.name = "CalificacionesApp"
-          include ':app'
-          """)
-
-          mkfile('gradle.properties', """
-          org.gradle.jvmargs=-Xmx2048m
-          android.useAndroi
+      - name: Crear Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: apk-v10.15-${{ github.run_number }}
+          name: "APK Calificaciones v10.15"
+          files: app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
