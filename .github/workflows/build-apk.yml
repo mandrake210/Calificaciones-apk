@@ -21,51 +21,16 @@ jobs:
       - name: Instalar Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Crear estructura del proyecto Android
+      - name: Crear proyecto Android con Python
         run: |
-          mkdir -p app/src/main/java/com/mandrake/calificaciones
-          mkdir -p app/src/main/res/values
-          mkdir -p app/src/main/res/layout
-          mkdir -p app/src/main/res/mipmap-hdpi
-          mkdir -p app/src/main/assets
+          python3 << 'PYEOF'
+          import os
 
-      - name: Descargar HTML de la app
-        run: |
-          curl -L "https://mandrake210.github.io/calificaciones/" \
-            -o app/src/main/assets/index.html
-          echo "HTML size: $(wc -c < app/src/main/assets/index.html)"
+          def mkfile(path, content):
+              os.makedirs(os.path.dirname(path), exist_ok=True)
+              open(path, 'w').write(content)
 
-      - name: Crear AndroidManifest.xml
-        run: |
-          cat > app/src/main/AndroidManifest.xml << 'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-              package="com.mandrake.calificaciones">
-              <uses-permission android:name="android.permission.INTERNET" />
-              <uses-permission android:name="android.permission.CAMERA" />
-              <application
-                  android:allowBackup="true"
-                  android:label="Calificaciones"
-                  android:usesCleartextTraffic="true"
-                  android:hardwareAccelerated="true">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true"
-                      android:screenOrientation="sensorLandscape"
-                      android:configChanges="orientation|screenSize|keyboardHidden"
-                      android:windowSoftInputMode="adjustResize">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-
-      - name: Crear MainActivity.java
-        run: |
-          cat > app/src/main/java/com/mandrake/calificaciones/MainActivity.java << 'EOF'
+          mkfile('app/src/main/java/com/mandrake/calificaciones/MainActivity.java', """
           package com.mandrake.calificaciones;
           import android.app.Activity;
           import android.os.Bundle;
@@ -74,8 +39,7 @@ jobs:
           import android.webkit.*;
           public class MainActivity extends Activity {
               private WebView webView;
-              @Override
-              protected void onCreate(Bundle savedInstanceState) {
+              @Override protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
                   requestWindowFeature(Window.FEATURE_NO_TITLE);
                   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -94,27 +58,40 @@ jobs:
               }
               @Override public void onBackPressed() { if (webView.canGoBack()) webView.goBack(); else super.onBackPressed(); }
           }
-          EOF
+          """)
 
-      - name: Crear resources
-        run: |
-          cat > app/src/main/res/values/styles.xml << 'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
+          mkfile('app/src/main/AndroidManifest.xml', """<?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="com.mandrake.calificaciones">
+              <uses-permission android:name="android.permission.INTERNET" />
+              <uses-permission android:name="android.permission.CAMERA" />
+              <application android:allowBackup="true" android:label="Calificaciones"
+                  android:usesCleartextTraffic="true" android:hardwareAccelerated="true">
+                  <activity android:name=".MainActivity" android:exported="true"
+                      android:screenOrientation="sensorLandscape"
+                      android:configChanges="orientation|screenSize|keyboardHidden">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>""")
+
+          mkfile('app/src/main/res/values/styles.xml', """<?xml version="1.0" encoding="utf-8"?>
           <resources>
               <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
                   <item name="android:statusBarColor">#1a1a2e</item>
               </style>
-          </resources>
-          EOF
-          cat > app/src/main/res/values/strings.xml << 'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <resources><string name="app_name">Calificaciones</string></resources>
-          EOF
+          </resources>""")
 
-      - name: Crear build.gradle del módulo app
-        run: |
-          cat > app/build.gradle << 'EOF'
-          plugins { id 'com.android.application' }
+          mkfile('app/src/main/res/values/strings.xml', """<?xml version="1.0" encoding="utf-8"?>
+          <resources><string name="app_name">Calificaciones</string></resources>""")
+
+          mkfile('app/build.gradle', """
+          plugins {
+              id 'com.android.application'
+          }
           android {
               compileSdk 34
               namespace 'com.mandrake.calificaciones'
@@ -134,48 +111,45 @@ jobs:
               }
           }
           dependencies {}
-          EOF
+          """)
 
-      - name: Crear build.gradle raíz
-        run: |
-          cat > build.gradle << 'EOF'
+          mkfile('build.gradle', """
           buildscript {
-              repositories { google(); mavenCentral() }
-              dependencies { classpath 'com.android.tools.build:gradle:8.2.2' }
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.2.2'
+              }
           }
-          allprojects { repositories { google(); mavenCentral() } }
-          EOF
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          """)
 
-      - name: Crear settings.gradle
-        run: |
-          cat > settings.gradle << 'EOF'
+          mkfile('settings.gradle', """
           pluginManagement {
-              repositories { google(); mavenCentral(); gradlePluginPortal() }
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
           }
           dependencyResolutionManagement {
               repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-              repositories { google(); mavenCentral() }
+              repositories {
+                  google()
+                  mavenCentral()
+              }
           }
           rootProject.name = "CalificacionesApp"
           include ':app'
-          EOF
+          """)
 
-      - name: Construir APK
-        run: |
-          gradle assembleDebug --stacktrace
-
-      - name: Subir APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Calificaciones-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
-
-      - name: Crear Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: apk-v10.15-${{ github.run_number }}
-          name: "APK Calificaciones v10.15"
-          files: app/build/outputs/apk/debug/app-debug.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          mkfile('gradle.properties', """
+          org.gradle.jvmargs=-Xmx2048m
+          android.useAndroi
